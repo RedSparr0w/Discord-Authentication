@@ -1,5 +1,5 @@
 <?php
-require('./config.php');
+require(__DIR__ . '/config.php');
 
 $authorizeURL = 'https://discord.com/api/oauth2/authorize';
 $tokenURL = 'https://discord.com/api/oauth2/token';
