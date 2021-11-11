@@ -20,7 +20,7 @@ if(get('action') == 'login') {
         'client_id' => OAUTH2_CLIENT_ID,
         'redirect_uri' => OAUTH2_REDIRECT_URI,
         'response_type' => 'code',
-        'scope' => 'identify guilds'
+        'scope' => 'identify'
     );
     
     // Redirect the user to Discord's authorization page
@@ -33,7 +33,7 @@ if(get('action') == 'logout') {
         'token' => session('discord_access_token'),
         'client_id' => OAUTH2_CLIENT_ID,
         'client_secret' => OAUTH2_CLIENT_SECRET,
-      ));
+    ));
       
     // Log user out of our site
     unset($_SESSION['discord_access_token']);
@@ -64,16 +64,19 @@ if(get('code')) {
         // var_dump($token);
         die('Something went wrong, try again later..');
     }
-    
+  
     $_SESSION['discord_access_token'] = $token->access_token;
     
     $user = apiRequest($apiURLBase);
+  
+  	// Dump user data if debugging
+  	// var_dump($user); die();
     
     $_SESSION['discord_id'] = $user->id;
-    $_SESSION['discord_avatar'] = $user->avatar;
+    $_SESSION['discord_avatar'] = $user->avatar ?? '';
     $_SESSION['discord_username'] = $user->username;
     $_SESSION['discord_discriminator'] = $user->discriminator;
-    $_SESSION['discord_public_flags'] = $user->public_flags;
+    $_SESSION['discord_public_flags'] = $user->public_flags ?? 0;
 
     header('Location: ' . strtok($_SERVER['REQUEST_URI'], '?'));
 }
@@ -126,6 +129,15 @@ if(session('discord_id')) {
     <img class="mb-4 rounded-circle" src="https://cdn.discordapp.com/avatars/<?=$_SESSION['discord_id']?>/<?=$_SESSION['discord_avatar']?>.png?size=256" alt="" width="72" height="72" onerror="this.src = 'assets/images/Discord_icon.svg'">
     <h1 class="h3 mb-3 font-weight-normal"><?=$_SESSION['discord_username']?>#<?=$_SESSION['discord_discriminator']?></h1>
     <p class="text-muted"><small><?=$_SESSION['discord_id']?></small></p>
+	<p>
+  	<?php
+    // Show the users profile badges
+    for ($i = 0; $i < 20; $i++){
+        if ($_SESSION['discord_public_flags'] & (1 << $i))
+            echo '<img height="16px" width="16px" src="assets/images/badges/' . $i . '.png" onerror="this.remove();"/>';
+    }
+    ?>
+  	</p>
     <a class="btn btn-lg btn-danger btn-block" href="?action=logout">LOG OUT</a>
     <?php
 } else {
@@ -140,7 +152,7 @@ if(session('discord_id')) {
 if (defined('DISCORD_SERVER_ID') && defined('DISCORD_SERVER_INVITE')) {
     ?>
     <a href="<?=DISCORD_SERVER_INVITE?>">
-        <img class="mt-5 mb-3" alt="Join our Discord!" src="https://img.shields.io/discord/<?=DISCORD_SERVER_ID?>?color=7289DA&label=discord%20server&logo=discord&logoColor=7289DA&style=for-the-badge"/>
+        <img class="mt-4 mb-2" height="28px" alt="Join our Discord!" src="https://img.shields.io/discord/<?=DISCORD_SERVER_ID?>?color=7289DA&label=discord%20server&logo=discord&logoColor=7289DA&style=for-the-badge"/>
     </a>
     <?php
 }
