@@ -1,8 +1,17 @@
 # Discord Authentication
- PHP Discord login authentication example
 
-# Getting started
+PHP Discord login authentication example
+
+## Example:
+
+See it in action here:
+
+https://discordauthentication.redsparr0w.com/
+
+## Getting started:
+
 Visit the following link:
+
 https://discord.com/developers/applications/
 
 Create a new application
