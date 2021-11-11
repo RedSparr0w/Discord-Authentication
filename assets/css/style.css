@@ -1,0 +1,30 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #23272A;
+  color: whitesmoke;
+  background: url(../images/Background.png) center no-repeat,center no-repeat #030206;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+main {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+  border-radius: 10px;
+  background-color: #2C2F33;
+}
+
+.btn-discord {
+  background-color: #7289DA;
+  color: whitesmoke;
+}
